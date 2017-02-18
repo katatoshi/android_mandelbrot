@@ -4,6 +4,8 @@ import android.databinding.Observable
 import android.databinding.ObservableField
 
 import com.katatoshi.androidmandelbrot.BR
+import com.katatoshi.androidmandelbrot.extension.addOnPropertyChangedCallback
+import com.katatoshi.androidmandelbrot.extension.removeOnPropertyChangedCallback
 import com.katatoshi.androidmandelbrot.model.MainModel
 
 /**
@@ -39,11 +41,9 @@ class MainViewModel {
 
 
     //region
-    private val onMainModelPropertyChangedCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(sender: Observable, propertyId: Int) {
-            when (propertyId) {
-                BR.sampleText -> sampleText.set(MainModel.sampleText)
-            }
+    private val onMainModelPropertyChangedCallback = { sender: Observable, propertyId: Int ->
+        when (propertyId) {
+            BR.sampleText -> sampleText.set(MainModel.sampleText)
         }
     }
 
