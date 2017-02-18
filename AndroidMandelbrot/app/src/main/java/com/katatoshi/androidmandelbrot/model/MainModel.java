@@ -11,11 +11,11 @@ import com.katatoshi.androidmandelbrot.BR;
  */
 public class MainModel extends BaseObservable {
 
+
+    //region シングルトンパターン
     private MainModel() {
     }
 
-
-    //region シングルトンインスタンスのプロパティ。
     private static MainModel instance;
 
     public static MainModel getInstance() {
