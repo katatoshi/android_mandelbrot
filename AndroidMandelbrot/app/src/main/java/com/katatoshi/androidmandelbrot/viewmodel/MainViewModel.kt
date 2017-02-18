@@ -15,8 +15,6 @@ class MainViewModel {
 
     val sampleText = ObservableField<String>()
 
-    private var counter = 0
-
     /**
      * Model から同期します。
      */
@@ -24,9 +22,12 @@ class MainViewModel {
         sampleText.set(MainModel.sampleText)
     }
 
-    fun updateSampleText() {
-        counter++
-        MainModel.sampleText = "Hello World! ($counter)"
+    fun clearCounter() {
+        MainModel.counter = 0
+    }
+
+    fun incrementCounter() {
+        MainModel.counter += 1
     }
 
 

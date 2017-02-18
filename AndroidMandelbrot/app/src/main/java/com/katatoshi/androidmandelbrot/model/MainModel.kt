@@ -20,4 +20,19 @@ object MainModel : BaseObservable() {
             field = sampleText
             notifyPropertyChanged(BR.sampleText)
         }
+
+    @set:Bindable
+    var counter = 0
+        set(counter) {
+            if (this.counter == counter) {
+                return
+            }
+
+            field = counter
+            notifyPropertyChanged(BR.counter)
+
+            if (0 < counter) {
+                sampleText = "Hello World! ($counter)"
+            }
+        }
 }
