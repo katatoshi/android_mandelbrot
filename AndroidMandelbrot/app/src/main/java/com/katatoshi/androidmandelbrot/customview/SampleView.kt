@@ -57,8 +57,8 @@ class SampleView : View {
     private fun createSampleBitmap(w: Int, h: Int): Bitmap {
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
 
-        for (x: Int in 0..(w - 1)) {
-            for (y: Int in 0..(h - 1)) {
+        for (x in 0..(w - 1)) {
+            for (y in 0..(h - 1)) {
                 bitmap.setPixel(x, y, Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)))
             }
         }
