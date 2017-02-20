@@ -2,6 +2,7 @@ package com.katatoshi.androidmandelbrot.viewmodel
 
 import android.databinding.Observable
 import android.databinding.ObservableField
+import android.graphics.Bitmap
 
 import com.katatoshi.androidmandelbrot.BR
 import com.katatoshi.androidmandelbrot.extension.DataBindingExtensions.addOnPropertyChangedCallback
@@ -13,21 +14,15 @@ import com.katatoshi.androidmandelbrot.model.MainModel
  */
 class MainViewModel {
 
-    val sampleText = ObservableField<String>()
+    var sampleBitmap = ObservableField<Bitmap>()
+
+    val onSizeChanged = { w: Int, h: Int -> MainModel.createSampleBitmap(w, h) }
 
     /**
      * Model から同期します。
      */
     fun refresh() {
-        sampleText.set(MainModel.sampleText)
-    }
-
-    fun clearCounter() {
-        MainModel.counter = 0
-    }
-
-    fun incrementCounter() {
-        MainModel.counter += 1
+        sampleBitmap.set(MainModel.sampleBitmap)
     }
 
 
@@ -44,7 +39,7 @@ class MainViewModel {
     //region
     private val onMainModelPropertyChangedCallback = { sender: Observable, propertyId: Int ->
         when (propertyId) {
-            BR.sampleText -> sampleText.set(MainModel.sampleText)
+            BR.sampleBitmap -> sampleBitmap.set(MainModel.sampleBitmap)
         }
     }
 
