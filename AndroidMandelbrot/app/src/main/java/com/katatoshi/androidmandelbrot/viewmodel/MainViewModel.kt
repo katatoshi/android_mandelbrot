@@ -1,6 +1,7 @@
 package com.katatoshi.androidmandelbrot.viewmodel
 
 import android.databinding.Observable
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.graphics.Bitmap
 
@@ -14,9 +15,11 @@ import com.katatoshi.androidmandelbrot.model.MainModel
  */
 class MainViewModel {
 
-    var sampleBitmap = ObservableField<Bitmap>()
+    val sampleBitmap = ObservableField<Bitmap>()
 
     val onSizeChanged = { w: Int, h: Int -> MainModel.createSampleBitmap(w, h) }
+
+    val loading = ObservableBoolean(MainModel.loading)
 
     /**
      * Model から同期します。
@@ -40,6 +43,7 @@ class MainViewModel {
     private val onMainModelPropertyChangedCallback = { sender: Observable, propertyId: Int ->
         when (propertyId) {
             BR.sampleBitmap -> sampleBitmap.set(MainModel.sampleBitmap)
+            BR.loading -> loading.set(MainModel.loading)
         }
     }
 

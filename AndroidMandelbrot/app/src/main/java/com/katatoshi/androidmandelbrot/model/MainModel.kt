@@ -27,10 +27,28 @@ object MainModel : BaseObservable() {
             notifyPropertyChanged(BR.sampleBitmap)
         }
 
-    fun createSampleBitmap(w: Int, h: Int) {
-        SampleBitmap.createSampleBitmapPromise(w, h).done {
-            sampleBitmap = it
+    @get:Bindable
+    var loading = false
+        private set(loading) {
+            if (this.loading == loading) {
+                return
+            }
+
+            field = loading
+            notifyPropertyChanged(BR.loading)
         }
+
+    fun createSampleBitmap(w: Int, h: Int) {
+        if (loading) {
+            return
+        }
+
+        loading = true
+
+        SampleBitmap.createSampleBitmapPromise(w, h)
+                .done { sampleBitmap = it }
+                .fail { sampleBitmap = null }
+                .always { state, bitmap, throwable -> loading = false }
     }
 }
 
