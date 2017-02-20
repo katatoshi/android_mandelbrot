@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import org.jdeferred.Promise
+import org.jdeferred.android.AndroidDeferredManager
 import java.util.*
 
 /**
@@ -14,13 +16,9 @@ import java.util.*
  */
 class SampleView : View {
 
-    private var w = 0;
-
-    private var h = 0;
-
     private val paint = Paint()
 
-    private val random = Random()
+    private var bitmap: Bitmap? = null
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -36,33 +34,46 @@ class SampleView : View {
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {}
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
 
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        w = widthSize
-
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        h = heightSize
+        SampleBitmap.createSampleBitmapPromise(w, h).done {
+            bitmap = it
+            invalidate()
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        canvas.drawBitmap(createSampleBitmap(w, h), 0f, 0f, paint)
+        bitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, paint)
+        }
     }
+}
 
-    private fun createSampleBitmap(w: Int, h: Int): Bitmap {
+
+/**
+ * お試し Bitmap
+ */
+object SampleBitmap {
+
+    private val random = Random()
+
+    fun createSampleBitmap(w: Int, h: Int): Bitmap {
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
 
-        for (x in 0..(w - 1)) {
-            for (y in 0..(h - 1)) {
+        (0..w - 1).forEach { x ->
+            (0..h - 1).forEach { y ->
                 bitmap.setPixel(x, y, Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)))
             }
         }
 
         return bitmap
+    }
+
+    fun createSampleBitmapPromise(w: Int, h: Int): Promise<Bitmap, Throwable, Void> {
+        val callable = { createSampleBitmap(w, h) }
+        return AndroidDeferredManager().`when`(callable)
     }
 }
