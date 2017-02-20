@@ -33,7 +33,7 @@ object MainModel : BaseObservable() {
             notifyPropertyChanged(BR.loading)
         }
 
-    fun createSampleBitmap(w: Int, h: Int) {
+    fun createBitmap(w: Int, h: Int) {
         if (loading) {
             return
         }
