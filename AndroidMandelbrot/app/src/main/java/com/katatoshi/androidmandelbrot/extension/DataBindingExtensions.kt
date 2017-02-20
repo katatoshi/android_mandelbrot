@@ -4,7 +4,7 @@ import android.databinding.BaseObservable
 import android.databinding.Observable
 
 /**
- * BaseObservable に対する拡張
+ * android.databinding に対する拡張
  */
 
 private var callbackMap: MutableMap<(Observable, Int) -> Unit, Observable.OnPropertyChangedCallback> = mutableMapOf()
