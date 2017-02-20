@@ -17,9 +17,9 @@ class MainViewModel {
 
     val bitmap = ObservableField<Bitmap>()
 
-    val onSizeChanged = { w: Int, h: Int -> MainModel.createSampleBitmap(w, h) }
-
     val loading = ObservableBoolean(MainModel.loading)
+
+    val onSizeChanged = { w: Int, h: Int -> MainModel.createSampleBitmap(w, h) }
 
     /**
      * Model から同期します。
