@@ -15,7 +15,7 @@ import com.katatoshi.androidmandelbrot.model.MainModel
  */
 class MainViewModel {
 
-    val sampleBitmap = ObservableField<Bitmap>()
+    val bitmap = ObservableField<Bitmap>()
 
     val onSizeChanged = { w: Int, h: Int -> MainModel.createSampleBitmap(w, h) }
 
@@ -25,7 +25,7 @@ class MainViewModel {
      * Model から同期します。
      */
     fun refresh() {
-        sampleBitmap.set(MainModel.sampleBitmap)
+        bitmap.set(MainModel.bitmap)
         loading.set(MainModel.loading)
     }
 
@@ -43,7 +43,7 @@ class MainViewModel {
     //region
     private val onMainModelPropertyChangedCallback = { sender: Observable, propertyId: Int ->
         when (propertyId) {
-            BR.sampleBitmap -> sampleBitmap.set(MainModel.sampleBitmap)
+            BR.bitmap -> bitmap.set(MainModel.bitmap)
             BR.loading -> loading.set(MainModel.loading)
         }
     }

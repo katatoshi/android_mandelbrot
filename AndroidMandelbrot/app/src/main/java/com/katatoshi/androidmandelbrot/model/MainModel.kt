@@ -12,14 +12,14 @@ import com.katatoshi.androidmandelbrot.BR
 object MainModel : BaseObservable() {
 
     @get:Bindable
-    var sampleBitmap: Bitmap? = null
-        set(sampleBitmap) {
-            if (this.sampleBitmap == sampleBitmap) {
+    var bitmap: Bitmap? = null
+        set(bitmap) {
+            if (this.bitmap == bitmap) {
                 return
             }
 
-            field = sampleBitmap
-            notifyPropertyChanged(BR.sampleBitmap)
+            field = bitmap
+            notifyPropertyChanged(BR.bitmap)
         }
 
     @get:Bindable
@@ -41,8 +41,8 @@ object MainModel : BaseObservable() {
         loading = true
 
         RandomColorPixels.createBitmapPromise(w, h)
-                .done { sampleBitmap = it }
-                .fail { sampleBitmap = null }
+                .done { bitmap = it }
+                .fail { bitmap = null }
                 .always { state, bitmap, throwable -> loading = false }
     }
 }

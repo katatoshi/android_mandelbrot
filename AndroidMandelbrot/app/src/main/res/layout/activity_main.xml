@@ -19,7 +19,7 @@
         <com.katatoshi.androidmandelbrot.customview.BitmapDrawingView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:bitmap="@{viewModel.sampleBitmap}"
+            app:bitmap="@{viewModel.bitmap}"
             app:onSizeChanged="@{viewModel.onSizeChanged}" />
 
         <RelativeLayout
