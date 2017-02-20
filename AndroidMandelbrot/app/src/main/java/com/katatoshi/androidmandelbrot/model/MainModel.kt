@@ -10,7 +10,7 @@ import com.katatoshi.androidmandelbrot.BR
  */
 object MainModel : BaseObservable() {
 
-    @set:Bindable
+    @get:Bindable
     var sampleText = "Hello World!"
         set(sampleText) {
             if (this.sampleText == sampleText) {
@@ -21,7 +21,7 @@ object MainModel : BaseObservable() {
             notifyPropertyChanged(BR.sampleText)
         }
 
-    @set:Bindable
+    @get:Bindable
     var counter = 0
         set(counter) {
             if (this.counter == counter) {
