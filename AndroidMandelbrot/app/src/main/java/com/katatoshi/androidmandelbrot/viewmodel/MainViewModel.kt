@@ -26,6 +26,7 @@ class MainViewModel {
      */
     fun refresh() {
         sampleBitmap.set(MainModel.sampleBitmap)
+        loading.set(MainModel.loading)
     }
 
 
