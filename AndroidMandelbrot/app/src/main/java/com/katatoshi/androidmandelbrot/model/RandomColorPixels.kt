@@ -8,13 +8,13 @@ import com.katatoshi.androidmandelbrot.extension.JDeferredExtensions.of
 import java.util.*
 
 /**
- * お試し Bitmap
+ * ランダムな色のピクセルからなる Bitmap
  */
-object SampleBitmap {
+object RandomColorPixels {
 
     private val random = Random()
 
-    fun createSampleBitmap(w: Int, h: Int): Bitmap {
+    fun createBitmap(w: Int, h: Int): Bitmap {
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
 
         (0..w - 1).forEach { x ->
@@ -26,7 +26,7 @@ object SampleBitmap {
         return bitmap
     }
 
-    fun createSampleBitmapPromise(w: Int, h: Int): Promise<Bitmap, Throwable, Void> {
-        return AndroidDeferredManager().of { createSampleBitmap(w, h) }
+    fun createBitmapPromise(w: Int, h: Int): Promise<Bitmap, Throwable, Void> {
+        return AndroidDeferredManager().of { createBitmap(w, h) }
     }
 }

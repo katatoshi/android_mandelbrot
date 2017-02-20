@@ -40,7 +40,7 @@ object MainModel : BaseObservable() {
 
         loading = true
 
-        SampleBitmap.createSampleBitmapPromise(w, h)
+        RandomColorPixels.createBitmapPromise(w, h)
                 .done { sampleBitmap = it }
                 .fail { sampleBitmap = null }
                 .always { state, bitmap, throwable -> loading = false }
