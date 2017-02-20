@@ -35,8 +35,8 @@ class MainViewModel {
         addMainModelPropertyChangedCallbackToModel()
     }
 
-    fun removePropertyChangedCallbackToModel() {
-        removeMainModelPropertyChangedCallbackToModel()
+    fun removePropertyChangedCallbackFromModel() {
+       removeMainModelPropertyChangedCallbackFromModel()
     }
 
 
@@ -52,7 +52,7 @@ class MainViewModel {
         MainModel.addOnPropertyChangedCallback(onMainModelPropertyChangedCallback)
     }
 
-    private fun removeMainModelPropertyChangedCallbackToModel() {
+    private fun removeMainModelPropertyChangedCallbackFromModel() {
         MainModel.removeOnPropertyChangedCallback(onMainModelPropertyChangedCallback)
     }
     //endregion

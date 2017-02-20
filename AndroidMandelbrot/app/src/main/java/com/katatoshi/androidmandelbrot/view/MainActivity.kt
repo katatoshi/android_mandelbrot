@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        viewModel.removePropertyChangedCallbackToModel()
+        viewModel.removePropertyChangedCallbackFromModel()
 
         super.onPause()
     }
