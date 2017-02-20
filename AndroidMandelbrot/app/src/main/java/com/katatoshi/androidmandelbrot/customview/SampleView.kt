@@ -7,7 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.katatoshi.androidmandelbrot.extension.of
+import com.katatoshi.androidmandelbrot.extension.JDeferredExtensions.of
 import org.jdeferred.Promise
 import org.jdeferred.android.AndroidDeferredManager
 import java.util.*

@@ -4,8 +4,8 @@ import android.databinding.Observable
 import android.databinding.ObservableField
 
 import com.katatoshi.androidmandelbrot.BR
-import com.katatoshi.androidmandelbrot.extension.addOnPropertyChangedCallback
-import com.katatoshi.androidmandelbrot.extension.removeOnPropertyChangedCallback
+import com.katatoshi.androidmandelbrot.extension.DataBindingExtensions.addOnPropertyChangedCallback
+import com.katatoshi.androidmandelbrot.extension.DataBindingExtensions.removeOnPropertyChangedCallback
 import com.katatoshi.androidmandelbrot.model.MainModel
 
 /**
