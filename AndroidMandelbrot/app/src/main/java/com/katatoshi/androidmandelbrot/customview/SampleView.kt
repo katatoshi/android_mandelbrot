@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import com.katatoshi.androidmandelbrot.extension.of
 import org.jdeferred.Promise
 import org.jdeferred.android.AndroidDeferredManager
 import java.util.*
@@ -73,7 +74,6 @@ object SampleBitmap {
     }
 
     fun createSampleBitmapPromise(w: Int, h: Int): Promise<Bitmap, Throwable, Void> {
-        val callable = { createSampleBitmap(w, h) }
-        return AndroidDeferredManager().`when`(callable)
+        return AndroidDeferredManager().of { createSampleBitmap(w, h) }
     }
 }
