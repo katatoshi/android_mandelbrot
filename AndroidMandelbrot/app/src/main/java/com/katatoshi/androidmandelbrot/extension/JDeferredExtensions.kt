@@ -22,10 +22,3 @@ fun <D : Any, F : Any, P : Any, E : Any> Promise<D, F, P>.flatMap(f: (D) -> Prom
 fun DeferredManager.delay(millis: Long): Promise<Unit, Throwable, Void> {
     return this.of { Thread.sleep(millis) }
 }
-
-fun <D : Any, F : Any, P : Any> Promise<D, F, P>.delay(millis: Long): Promise<D, F, P> {
-    return this.flatMap {
-        Thread.sleep(millis)
-        this
-    }
-}
