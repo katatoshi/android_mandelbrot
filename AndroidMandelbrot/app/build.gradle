@@ -39,7 +39,11 @@ dependencies {
     })
 
     compile 'com.android.support:appcompat-v7:25.1.1'
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    compile 'org.jdeferred:jdeferred:1.2.4'
+    compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
 
     kapt "com.android.databinding:compiler:$android_studio_version"
 
