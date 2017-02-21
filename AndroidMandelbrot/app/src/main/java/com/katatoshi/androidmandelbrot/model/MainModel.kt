@@ -43,7 +43,7 @@ object MainModel : BaseObservable() {
 
         loading = true
 
-        completableFuture = RandomColorPixels.createBitmapFuture(w, h)
+        completableFuture = MandelbrotBitmap.createBitmapFuture(w, h)
 
         completableFuture?.exceptionally {
             bitmap = null
