@@ -2,9 +2,7 @@ package com.katatoshi.androidmandelbrot.customview
 
 import android.content.Context
 import android.databinding.BindingAdapter
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 
@@ -36,22 +34,25 @@ class BitmapDrawingView : View {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
+        bitmap = null
         onSizeChanged?.invoke(w, h)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        bitmap?.let { canvas.drawBitmap(it, 0f, 0f, paint) }
+        bitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, paint)
+        } ?: {
+            canvas.drawColor(Color.WHITE)
+        }()
     }
 }
 
 @BindingAdapter("bitmap")
 fun BitmapDrawingView.setBitmap(bitmap: Bitmap?) {
-    bitmap?.let {
-        this.bitmap = it
-        this.invalidate()
-    }
+    this.bitmap = bitmap
+    this.invalidate()
 }
 
 @BindingAdapter("onSizeChanged")
