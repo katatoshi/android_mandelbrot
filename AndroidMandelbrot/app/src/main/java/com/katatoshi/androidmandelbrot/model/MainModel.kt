@@ -5,6 +5,7 @@ import android.databinding.Bindable
 import android.graphics.Bitmap
 
 import com.katatoshi.androidmandelbrot.BR
+import java8.util.concurrent.CompletableFuture
 
 /**
  * メインの model。
@@ -33,16 +34,27 @@ object MainModel : BaseObservable() {
             notifyPropertyChanged(BR.loading)
         }
 
+    var completableFuture: CompletableFuture<Bitmap?>? = null
+
     fun loadBitmap(w: Int, h: Int) {
         if (loading) {
-            return
+            completableFuture?.cancel(true)
         }
 
         loading = true
 
-        RandomColorPixels.createBitmapPromise(w, h)
-                .done { bitmap = it }
-                .fail { bitmap = null }
-                .always { state, bitmap, throwable -> loading = false }
+        completableFuture = RandomColorPixels.createBitmapFuture(w, h)
+
+        completableFuture?.exceptionally {
+            bitmap = null
+            loading = false
+            null
+        }
+
+        completableFuture?.thenAccept {
+            bitmap = it
+            loading = false
+        }
+
     }
 }

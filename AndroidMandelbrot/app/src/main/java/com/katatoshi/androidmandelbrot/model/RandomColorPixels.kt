@@ -2,9 +2,7 @@ package com.katatoshi.androidmandelbrot.model
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import org.jdeferred.Promise
-import org.jdeferred.android.AndroidDeferredManager
-import com.katatoshi.androidmandelbrot.extension.JDeferredExtensions.of
+import java8.util.concurrent.CompletableFuture
 import java.util.*
 
 /**
@@ -26,7 +24,7 @@ object RandomColorPixels {
         return bitmap
     }
 
-    fun createBitmapPromise(w: Int, h: Int): Promise<Bitmap, Throwable, Void> {
-        return AndroidDeferredManager().of { createBitmap(w, h) }
+    fun createBitmapFuture(w: Int, h: Int): CompletableFuture<Bitmap?> {
+        return CompletableFuture.supplyAsync { createBitmap(w, h) }
     }
 }
