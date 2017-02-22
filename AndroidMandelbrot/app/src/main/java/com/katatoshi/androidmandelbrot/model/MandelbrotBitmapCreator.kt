@@ -25,19 +25,13 @@ class MandelbrotBitmapCreator(
         val maxIteration: Int = 100) {
 
     /** 描画領域の理論的な高さ。 */
-    val height: Double
+    val height = (hPixels.toDouble() * width) / wPixels.toDouble()
 
     /** ピクセルのインデックスを理論的な座標に変換する際に使用する定数。 */
-    private val const1: Double
+    private val const1 = center.first - width / 2.0
 
     /** ピクセルのインデックスを理論的な座標に変換する際に使用する定数。 */
-    private val const2: Double
-
-    init {
-        height = (hPixels.toDouble() * width) / wPixels.toDouble()
-        const1 = center.first - width / 2.0
-        const2 = center.second + height / 2.0
-    }
+    private val const2 = center.second + height / 2.0
 
     /**
      * 与えられた座標（複素数）をパラメータとする漸化式が初めて発散と判定された繰り返し回数を求めます。
