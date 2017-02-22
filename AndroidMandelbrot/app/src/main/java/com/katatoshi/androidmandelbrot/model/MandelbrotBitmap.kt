@@ -6,30 +6,47 @@ import java8.util.concurrent.CompletableFuture
 import java8.util.stream.IntStreams
 
 /**
- * マンデルブロ集合の Bitmap
+ * マンデルブロ集合 Bitmap を生成するクラス。
  */
-object MandelbrotBitmap {
+class MandelbrotBitmap(
+        /** 幅のピクセル数。 */
+        val wPixels: Int,
 
-    private val maxIndex = 200
+        /** 高さのピクセル数。 */
+        val hPixels: Int,
 
-    private val width = 3.0
+        /** 描画領域の理論的な中心座標（複素数）。 */
+        val center: Pair<Double, Double> = Pair(-0.5, 0.0),
 
-    private var height = 0.0
-        set(value) {
-            field = value
-            const1 = center.first - width / 2.0
-            const2 = center.second + height / 2.0
-        }
+        /** 描画領域の理論的な幅。 */
+        val width: Double = 3.0,
 
-    private val center = Pair(-0.5, 0.0)
+        /** 繰り返し回数の上限。 */
+        val maxIteration: Int = 100) {
 
-    private var const1 = 0.0
+    /** 描画領域の理論的な高さ。 */
+    val height: Double
 
-    private var const2 = 0.0
+    /** ピクセルのインデックスを理論的な座標に変換する際に使用する定数。 */
+    private val const1: Double
 
-    private fun divergenceIndex(c: Pair<Double, Double>): Int? {
+    /** ピクセルのインデックスを理論的な座標に変換する際に使用する定数。 */
+    private val const2: Double
+
+    init {
+        height = (hPixels.toDouble() * width) / wPixels.toDouble()
+        const1 = center.first - width / 2.0
+        const2 = center.second + height / 2.0
+    }
+
+    /**
+     * 与えられた座標（複素数）をパラメータとする漸化式が初めて発散と判定された繰り返し回数を求めます。
+     * @param c パラメータの座標（複素数）
+     * @return 漸化式が初めて発散と判定された繰り返し回数
+     */
+    private fun divergentIteration(c: Pair<Double, Double>): Int? {
         var z = Pair(0.0, 0.0)
-        for (k in 1..maxIndex) {
+        for (k in 1..maxIteration) {
             z = z * z + c
 
             if (2 < z.abs()) {
@@ -40,46 +57,77 @@ object MandelbrotBitmap {
         return null
     }
 
-    private fun divergenceIndex(w: Double, h: Double, x: Double, y: Double): Int? {
-        val c = Pair(const1 + (x * width) / w, const2 - (y * height) / h)
-        return divergenceIndex(c)
+    /**
+     * 与えられたピクセルをパラメータとする漸化式が初めて発散と判定された繰り返し回数を求めます。
+     * @param xPixel ピクセルの x インデックス
+     * @param yPixel ピクセルの y インデックス
+     * @return 漸化式が初めて発散と判定された繰り返し回数
+     */
+    private fun divergentIteration(xPixel: Double, yPixel: Double): Int? {
+        val c = Pair(const1 + (xPixel * width) / wPixels, const2 - (yPixel * height) / hPixels)
+        return divergentIteration(c)
     }
 
-    private fun pixelColor(w: Int, h: Int, x: Int, y: Int): Int {
-        return divergenceIndex(w.toDouble(), h.toDouble(), x.toDouble(), y.toDouble())?.let { Color.BLUE } ?: Color.BLACK
+    /**
+     * 与えられたピクセルの色を求めます。
+     * @param xPixel ピクセルの x インデックス
+     * @param yPixel ピクセルの y インデックス
+     * @return ピクセルの色
+     */
+    private fun pixelColor(xPixel: Double, yPixel: Double): Int {
+        return divergentIteration(xPixel, yPixel)?.let { Color.BLUE } ?: Color.BLACK
     }
 
-    fun createBitmap(w: Int, h: Int): Bitmap {
+    /**
+     * 与えられたピクセルの色を求めます。
+     * @param xPixel ピクセルの x インデックス（整数）
+     * @param yPixel ピクセルの y インデックス（整数）
+     * @return ピクセルの色
+     */
+    private fun pixelColor(xPixel: Int, yPixel: Int): Int {
+        return pixelColor(xPixel.toDouble(), yPixel.toDouble())
+    }
+
+    /**
+     * マンデルブロ集合 Bitmap を生成します。
+     * @return マンデルブロ集合 Bitmap
+     */
+    fun createBitmap(): Bitmap {
         return measure {
-            height = (h.toDouble() * width) / w.toDouble()
-
-            val colors = IntArray(w * h)
-            IntStreams.range(0, h).parallel().forEach { y ->
-                IntStreams.range(0, w).parallel().forEach { x ->
-                    colors[y * w + x] = pixelColor(w, h, x, y)
+            val colors = IntArray(wPixels * hPixels)
+            IntStreams.range(0, hPixels).parallel().forEach { y ->
+                IntStreams.range(0, wPixels).parallel().forEach { x ->
+                    colors[y * wPixels + x] = pixelColor(x, y)
                 }
             }
-            Bitmap.createBitmap(colors, w, h, Bitmap.Config.ARGB_8888)
+            Bitmap.createBitmap(colors, wPixels, hPixels, Bitmap.Config.ARGB_8888)
         }
     }
 
-    fun createBitmapFuture(w: Int, h: Int): CompletableFuture<Bitmap?> {
-        return CompletableFuture.supplyAsync { createBitmap(w, h) }
+    /**
+     * マンデルブロ集合 Bitmap を生成する Promise を生成します。
+     * @return Bitmap を生成する Promise
+     */
+    fun createBitmapFuture(): CompletableFuture<Bitmap?> {
+        return CompletableFuture.supplyAsync { createBitmap() }
     }
 
-    /** parallel 版との比較用。 */
-    @Deprecated("各ピクセルの色の計算を直列に行うのでパフォーマンス上問題があります。createBitmap を使用してください。")
-    fun createBitmapSerial(w: Int, h: Int): Bitmap {
-        return measure {
-            height = (h.toDouble() * width) / w.toDouble()
 
-            val colors = IntArray(w * h)
-            (0..w - 1).forEach { y ->
-                (0..h - 1).forEach { x ->
-                    colors[y * w + x] = pixelColor(w, h, x, y)
+    /**
+     * マンデルブロ集合 Bitmap を生成します（parallel 版との比較用）。
+     * @return マンデルブロ集合 Bitmap
+     */
+    @Deprecated("各ピクセルの色の計算を直列に行うのでパフォーマンス上問題があります。createBitmap を使用してください。")
+    fun createBitmapSerial(): Bitmap {
+        return measure {
+
+            val colors = IntArray(wPixels * hPixels)
+            (0..wPixels - 1).forEach { y ->
+                (0..hPixels - 1).forEach { x ->
+                    colors[y * wPixels + x] = pixelColor(x, y)
                 }
             }
-            Bitmap.createBitmap(colors, w, h, Bitmap.Config.ARGB_8888)
+            Bitmap.createBitmap(colors, wPixels, hPixels, Bitmap.Config.ARGB_8888)
         }
     }
 
