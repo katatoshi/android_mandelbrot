@@ -33,6 +33,27 @@ class MandelbrotBitmapCreator(
     /** ピクセルのインデックスを理論的な座標に変換する際に使用する定数。 */
     private val const2 = center.second + height / 2.0
 
+    /** グラデーションの最初の色。Blue 900 */
+    private val color1 = Color.argb(255, 0x0d, 0x47, 0xa1)
+
+    /** グラデーションの最後の色。White */
+    private val color2 = Color.argb(255, 0xff, 0xff, 0xff)
+
+    /** 最初に発散と判定された繰り返し回数に応じた色の配列。color1 から color2 へのグラデーション。 */
+    private val gradient: IntArray
+
+    init {
+        gradient = (0..maxIteration)
+                .map { it.toDouble() / maxIteration.toDouble() }
+                .map {
+                    val red = (1.0 - it) * Color.red(color1) + it * Color.red(color2)
+                    val green = (1.0 - it) * Color.green(color1) + it * Color.green(color2)
+                    val blue = (1.0 - it) * Color.blue(color1) + it * Color.blue(color2)
+                    Color.argb(255, red.toInt(), green.toInt(), blue.toInt())
+                }
+                .toIntArray()
+    }
+
     /**
      * 与えられた座標（複素数）をパラメータとする漸化式が初めて発散と判定された繰り返し回数を求めます。
      * @param c パラメータの座標（複素数）
@@ -69,7 +90,7 @@ class MandelbrotBitmapCreator(
      * @return ピクセルの色
      */
     private fun pixelColor(xPixel: Double, yPixel: Double): Int {
-        return divergentIteration(xPixel, yPixel)?.let { Color.BLUE } ?: Color.BLACK
+        return divergentIteration(xPixel, yPixel)?.let { gradient[it] } ?: Color.BLACK
     }
 
     /**
