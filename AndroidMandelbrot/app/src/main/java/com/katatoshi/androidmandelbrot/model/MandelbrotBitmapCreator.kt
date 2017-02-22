@@ -112,7 +112,6 @@ class MandelbrotBitmapCreator(
         return CompletableFuture.supplyAsync { createBitmap() }
     }
 
-
     /**
      * マンデルブロ集合 Bitmap を生成します（parallel 版との比較用）。
      * @return マンデルブロ集合 Bitmap
