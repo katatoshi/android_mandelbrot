@@ -43,7 +43,7 @@ object MainModel : BaseObservable() {
 
         loading = true
 
-        val mandelbrot = MandelbrotBitmap(w, h)
+        val mandelbrot = MandelbrotBitmapCreator(w, h)
         completableFuture = mandelbrot.createBitmapFuture()
 
         completableFuture?.exceptionally {

@@ -8,7 +8,7 @@ import java8.util.stream.IntStreams
 /**
  * マンデルブロ集合 Bitmap を生成するクラス。
  */
-class MandelbrotBitmap(
+class MandelbrotBitmapCreator(
         /** 幅のピクセル数。 */
         val wPixels: Int,
 
