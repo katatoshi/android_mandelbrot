@@ -122,8 +122,8 @@ class MandelbrotBitmapCreator(
         return measure {
 
             val colors = IntArray(wPixels * hPixels)
-            (0..wPixels - 1).forEach { y ->
-                (0..hPixels - 1).forEach { x ->
+            (0..hPixels - 1).forEach { y ->
+                (0..wPixels - 1).forEach { x ->
                     colors[y * wPixels + x] = pixelColor(x, y)
                 }
             }
